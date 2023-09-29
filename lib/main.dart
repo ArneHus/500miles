@@ -67,14 +67,20 @@ class _LocationPageState extends State<LocationPage> {
       speedAccuracy: 0);
 
   Future<void> _getCurrentPositionAxxes() async {
+    await setAudio(WALK);
+    audioPlayer.resume();
     return _getCurrentPosition(_locationAxxes);
   }
 
   Future<void> _getCurrentPositionMallorca() async {
+    await setAudio(FIVEHUNDRED);
+    audioPlayer.resume();
     return _getCurrentPosition(_locationMallorca);
   }
 
   Future<void> _getCurrentPositionMadagascar() async {
+    await setAudio(FIVEHUNDRED_MORE);
+    audioPlayer.resume();
     return _getCurrentPosition(_locationMadagascar);
   }
 
