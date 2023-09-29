@@ -94,11 +94,14 @@ class _LocationPageState extends State<LocationPage> {
   @override
   void initState() {
     super.initState();
-
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.playing;
       });
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      getCurrenLocation();
     });
   }
 
@@ -110,6 +113,18 @@ class _LocationPageState extends State<LocationPage> {
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
+
+  }
+
+  Future<void> getCurrenLocation() async {
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position currentPosition) {
+      //setState(() => );
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   Future<void> _getCurrentPosition(Position position) async {
