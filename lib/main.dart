@@ -38,10 +38,13 @@ class _LocationPageState extends State<LocationPage> {
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
 
+  final String WALK = "walk.m4a";
+  final String FIVEHUNDRED = "500.m4a";
+  final String FIVEHUNDRED_MORE = "500more.m4a";
+
   @override
   void initState() {
     super.initState();
-    setAudio();
 
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
@@ -50,9 +53,8 @@ class _LocationPageState extends State<LocationPage> {
     });
   }
 
-  Future setAudio() async {
-    audioPlayer.setReleaseMode(ReleaseMode.loop);
-    audioPlayer.setSource(AssetSource("music.mp3"));
+  Future setAudio(String fileName) async {
+    audioPlayer.setSource(AssetSource(fileName));
   }
 
   @override
@@ -130,22 +132,6 @@ class _LocationPageState extends State<LocationPage> {
               )
             ],
           ),
-        ),
-      ),
-      floatingActionButton: CircleAvatar(
-        radius: 30,
-        child: IconButton(
-          icon: Icon(
-            isPlaying ? Icons.pause: Icons.play_arrow
-          ),
-          iconSize: 40,
-          onPressed: () async {
-            if (isPlaying) {
-              await audioPlayer.pause();
-            } else {
-              await audioPlayer.resume();
-            }
-          },
         ),
       ),
     );
