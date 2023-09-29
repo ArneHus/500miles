@@ -68,20 +68,17 @@ class _LocationPageState extends State<LocationPage> {
       speedAccuracy: 0);
 
   Future<void> _getCurrentPositionAxxes() async {
-    await setAudio(WALK);
-    audioPlayer.resume();
+    audioPlayer.play(AssetSource(WALK));
     return _getCurrentPosition(_locationAxxes);
   }
 
   Future<void> _getCurrentPositionMallorca() async {
-    await setAudio(FIVEHUNDRED);
-    audioPlayer.resume();
+    audioPlayer.play(AssetSource(FIVEHUNDRED));
     return _getCurrentPosition(_locationMallorca);
   }
 
   Future<void> _getCurrentPositionMadagascar() async {
-    await setAudio(FIVEHUNDRED_MORE);
-    audioPlayer.resume();
+    audioPlayer.play(AssetSource(FIVEHUNDRED_MORE));
     return _getCurrentPosition(_locationMadagascar);
   }
 
@@ -101,7 +98,7 @@ class _LocationPageState extends State<LocationPage> {
   void initState() {
     super.initState();
 
-    audioPlayer.setVolume(100.0);
+    audioPlayer.setVolume(1.0);
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.playing;
@@ -111,10 +108,6 @@ class _LocationPageState extends State<LocationPage> {
     WidgetsBinding.instance.addPostFrameCallback((_){
       getCurrenLocation();
     });
-  }
-
-  Future setAudio(String fileName) async {
-    audioPlayer.setSource(AssetSource(fileName));
   }
 
   @override
