@@ -33,7 +33,7 @@ class _LocationPageState extends State<LocationPage> {
   double _distanceKm = 0;
   double _distanceMiles = 0;
   String _textResult = "";
-  Position _locationAxxes = Position(
+  final Position _locationAxxes = const Position(
       latitude: 51.22903628943096,
       longitude: 4.412060064669845,
       timestamp: null,
@@ -44,7 +44,7 @@ class _LocationPageState extends State<LocationPage> {
       headingAccuracy: 0,
       speed: 0,
       speedAccuracy: 0);
-  Position _locationMallorca = Position(
+  final Position _locationMallorca = const Position(
       latitude: 39.6553963967368,
       longitude: 2.930623088750286,
       timestamp: null,
@@ -55,7 +55,7 @@ class _LocationPageState extends State<LocationPage> {
       headingAccuracy: 0,
       speed: 0,
       speedAccuracy: 0);
-  Position _locationMadagascar = Position(
+  final Position _locationMadagascar = const Position(
       latitude: -20.06729548400306,
       longitude: 46.88297593721642,
       timestamp: null,
@@ -88,9 +88,9 @@ class _LocationPageState extends State<LocationPage> {
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
 
-  final String WALK = "walk.m4a";
-  final String FIVEHUNDRED = "500.m4a";
-  final String FIVEHUNDRED_MORE = "500more.m4a";
+  final String WALK = "walk.mp3";
+  final String FIVEHUNDRED = "500.mp3";
+  final String FIVEHUNDRED_MORE = "500more.mp3";
 
   @override
   void initState() {
