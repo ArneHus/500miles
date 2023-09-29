@@ -27,17 +27,30 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
-  String? _currentAddress;
   Position? _currentPosition;
+  double _distanceKm = 0;
+  double _distanceMiles = 0;
+  String _textResult  = "";
+  //Position goalLocation = Position(latitude: 51.22903628943096, longitude: 4.412060064669845, timestamp: null, accuracy: 0, altitude: 0, altitudeAccuracy: 0, heading: 0, headingAccuracy: 0, speed: 0, speedAccuracy: 0);
+  Position goalLocation = Position(longitude: 51.22903628943096, latitude: 4.412060064669845, timestamp: null, accuracy: 0, altitude: 0, altitudeAccuracy: 0, heading: 0, headingAccuracy: 0, speed: 0, speedAccuracy: 0);
 
   Future<void> _getCurrentPosition() async {
-    print('PUSH THE BUTTON!');
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
-      setState(() => _currentPosition = position);
+          _distanceKm = Geolocator.distanceBetween(position.latitude, position.longitude, goalLocation.latitude, goalLocation.longitude);
+          _distanceKm = _distanceKm / 1000;
+          _distanceMiles = 0.621371192 * _distanceKm;
+          if(_distanceMiles < 500){
+            _textResult = "I wouldn't walk 500 miles!";
+          } else if(_distanceMiles < 1000){
+            _textResult = "I would walk 500 miles!";
+          } else {
+            _textResult = "I would walk 500 miles,\nand I would walk 500 more!";
+          }
+          setState(() => _currentPosition = position);
     }).catchError((e) {
       debugPrint(e);
     });
@@ -79,9 +92,10 @@ class _LocationPageState extends State<LocationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-              Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-              Text('ADDRESS: ${_currentAddress ?? ""}'),
+              //Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+              //Text('KM: ${_distanceKm ?? ""}'),
+              //Text('Miles: ${_distanceMiles ?? ""}'),
+              Text('${_textResult ?? ""}'),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _getCurrentPosition,
