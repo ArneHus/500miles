@@ -31,9 +31,52 @@ class _LocationPageState extends State<LocationPage> {
   Position? _currentPosition;
   double _distanceKm = 0;
   double _distanceMiles = 0;
-  String _textResult  = "";
-  //Position goalLocation = Position(latitude: 51.22903628943096, longitude: 4.412060064669845, timestamp: null, accuracy: 0, altitude: 0, altitudeAccuracy: 0, heading: 0, headingAccuracy: 0, speed: 0, speedAccuracy: 0);
-  Position goalLocation = Position(longitude: 51.22903628943096, latitude: 4.412060064669845, timestamp: null, accuracy: 0, altitude: 0, altitudeAccuracy: 0, heading: 0, headingAccuracy: 0, speed: 0, speedAccuracy: 0);
+  String _textResult = "TEST";
+  Position _locationAxxes = Position(
+      latitude: 51.22903628943096,
+      longitude: 4.412060064669845,
+      timestamp: null,
+      accuracy: 0,
+      altitude: 0,
+      altitudeAccuracy: 0,
+      heading: 0,
+      headingAccuracy: 0,
+      speed: 0,
+      speedAccuracy: 0);
+  Position _locationMallorca = Position(
+      latitude: 39.6553963967368,
+      longitude: 2.930623088750286,
+      timestamp: null,
+      accuracy: 0,
+      altitude: 0,
+      altitudeAccuracy: 0,
+      heading: 0,
+      headingAccuracy: 0,
+      speed: 0,
+      speedAccuracy: 0);
+  Position _locationMadagascar = Position(
+      latitude: -20.06729548400306,
+      longitude: 46.88297593721642,
+      timestamp: null,
+      accuracy: 0,
+      altitude: 0,
+      altitudeAccuracy: 0,
+      heading: 0,
+      headingAccuracy: 0,
+      speed: 0,
+      speedAccuracy: 0);
+
+  Future<void> _getCurrentPositionAxxes() async {
+    return _getCurrentPosition(_locationAxxes);
+  }
+
+  Future<void> _getCurrentPositionMallorca() async {
+    return _getCurrentPosition(_locationMallorca);
+  }
+
+  Future<void> _getCurrentPositionMadagascar() async {
+    return _getCurrentPosition(_locationMadagascar);
+  }
 
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
@@ -63,23 +106,23 @@ class _LocationPageState extends State<LocationPage> {
     super.dispose();
   }
 
-  Future<void> _getCurrentPosition() async {
+  Future<void> _getCurrentPosition(Position position) async {
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-          _distanceKm = Geolocator.distanceBetween(position.latitude, position.longitude, goalLocation.latitude, goalLocation.longitude);
-          _distanceKm = _distanceKm / 1000;
-          _distanceMiles = 0.621371192 * _distanceKm;
-          if(_distanceMiles < 500){
-            _textResult = "I wouldn't walk 500 miles!";
-          } else if(_distanceMiles < 1000){
-            _textResult = "I would walk 500 miles!";
-          } else {
-            _textResult = "I would walk 500 miles,\nand I would walk 500 more!";
-          }
-          setState(() => _currentPosition = position);
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position currentPosition) {
+      _distanceKm = Geolocator.distanceBetween(currentPosition.latitude,
+          currentPosition.longitude, position.latitude, position.longitude);
+      _distanceKm = _distanceKm / 1000;
+      _distanceMiles = 0.621371192 * _distanceKm;
+      if (_distanceMiles < 500) {
+        _textResult = "I would walk!";
+      } else if (_distanceMiles < 1000) {
+        _textResult = "I would walk 500 miles!";
+      } else {
+        _textResult = "I would walk 500 miles,\nand I would walk 500 more!";
+      }
+      setState(() => _currentPosition = position);
     }).catchError((e) {
       debugPrint(e);
     });
@@ -92,7 +135,8 @@ class _LocationPageState extends State<LocationPage> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Location services are disabled. Please enable the services')));
+          content: Text(
+              'Location services are disabled. Please enable the services')));
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -106,7 +150,8 @@ class _LocationPageState extends State<LocationPage> {
     }
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Location permissions are permanently denied, we cannot request permissions.')));
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
     return true;
@@ -127,9 +172,16 @@ class _LocationPageState extends State<LocationPage> {
               Text('${_textResult ?? ""}'),
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: _getCurrentPosition,
-                child: const Text("Get Current Location"),
-              )
+                onPressed: _getCurrentPositionAxxes,
+                child: const Text("Axxes kantoor"),
+              ),
+              ElevatedButton(
+                onPressed: _getCurrentPositionMallorca,
+                child: const Text("Mallorca"),
+              ),
+              ElevatedButton(
+                  onPressed: _getCurrentPositionMadagascar,
+                  child: const Text("Madagascar"))
             ],
           ),
         ),
