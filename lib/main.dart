@@ -32,7 +32,7 @@ class _LocationPageState extends State<LocationPage> {
   Position? _currentPosition;
   double _distanceKm = 0;
   double _distanceMiles = 0;
-  String _textResult = "";
+  String _gifResult = "";
   final Position _locationAxxes = const Position(
       latitude: 51.22903628943096,
       longitude: 4.412060064669845,
@@ -95,6 +95,8 @@ class _LocationPageState extends State<LocationPage> {
   @override
   void initState() {
     super.initState();
+
+    audioPlayer.setVolume(100.0);
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.playing;
@@ -114,7 +116,6 @@ class _LocationPageState extends State<LocationPage> {
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
-
   }
 
   Future<void> getCurrenLocation() async {
@@ -138,11 +139,11 @@ class _LocationPageState extends State<LocationPage> {
       _distanceKm = _distanceKm / 1000;
       _distanceMiles = 0.621371192 * _distanceKm;
       if (_distanceMiles < 500) {
-        _textResult = "I would walk!";
+        _gifResult = "iwouldwalk";
       } else if (_distanceMiles < 1000) {
-        _textResult = "I would walk 500 miles!";
+        _gifResult = "iwouldwalk500miles";
       } else {
-        _textResult = "I would walk 500 miles,\nand I would walk 500 more!";
+        _gifResult = "iwouldwalk500milesandmore";
       }
       setState(() => _currentPosition = position);
     }).catchError((e) {
@@ -182,16 +183,22 @@ class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Location Page")),
+      appBar: AppBar(
+        title: const Text("How far do I need to walk?"),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-              //Text('KM: ${_distanceKm ?? ""}'),
-              //Text('Miles: ${_distanceMiles ?? ""}'),
-              Text('${_textResult ?? ""}'),
+              _gifResult != "" ?
+                Image.asset(
+                  "assets/$_gifResult.gif",
+                  height: 350.0,
+                  width: 350.0,
+                ) :
+                const SizedBox(height: 350),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _getCurrentPositionAxxes,
