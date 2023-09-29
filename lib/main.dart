@@ -121,7 +121,7 @@ class _LocationPageState extends State<LocationPage> {
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position currentPosition) {
-      //setState(() => );
+      setState(() => _currentPosition = currentPosition);
     }).catchError((e) {
       debugPrint(e);
     });
@@ -143,7 +143,7 @@ class _LocationPageState extends State<LocationPage> {
       } else {
         _gifResult = "iwouldwalk500milesandmore";
       }
-      setState(() => _currentPosition = position);
+      //setState(() => _currentPosition = position);
     }).catchError((e) {
       debugPrint(e);
     });
@@ -190,6 +190,8 @@ class _LocationPageState extends State<LocationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+              Text('LNG: ${_currentPosition?.longitude ?? ""}'),
               _gifResult != "" ?
                 Image.asset(
                   "assets/$_gifResult.gif",
