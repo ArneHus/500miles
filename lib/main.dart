@@ -32,7 +32,7 @@ class _LocationPageState extends State<LocationPage> {
   Position? _currentPosition;
   double _distanceKm = 0;
   double _distanceMiles = 0;
-  String _textResult = "TEST";
+  String _textResult = "";
   Position _locationAxxes = Position(
       latitude: 51.22903628943096,
       longitude: 4.412060064669845,
