@@ -85,6 +85,11 @@ class _LocationPageState extends State<LocationPage> {
     return _getCurrentPosition(_locationMadagascar);
   }
 
+   _refresh() {
+    _gifResult = "";
+    setState(() => _currentPosition = null);
+  }
+
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
 
@@ -214,6 +219,10 @@ class _LocationPageState extends State<LocationPage> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: IconButton(
+        icon: const Icon(Icons.refresh),
+        onPressed: _refresh,
       ),
     );
   }
